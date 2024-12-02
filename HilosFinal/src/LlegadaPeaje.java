@@ -6,9 +6,9 @@ import java.util.Random;
 class Vehiculo implements Runnable {
     private int id;
     private int tiempoLlegada;
-    private VistaPeaje vista;
+    private Cliente.VistaPeaje vista;
 
-    public Vehiculo(int id, int tiempoLlegada, VistaPeaje vista) {
+    public Vehiculo(int id, int tiempoLlegada, Cliente.VistaPeaje vista) {
         this.id = id;
         this.tiempoLlegada = tiempoLlegada;
         this.vista = vista;
@@ -18,13 +18,32 @@ class Vehiculo implements Runnable {
     public void run() {
         try {
             Thread.sleep(tiempoLlegada); // Simula el tiempo de llegada
-            vista.moverVehiculo(id); // Mueve el vehículo en la interfaz gráfica
+            vista.moverVehiculo(id);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 }
+public class Cliente implements Runnable {
+    private final VistaPeaje vista;
+    private final String nombre;
 
+    public Cliente(Autoservicio autoservicio, VistaPeaje vista, String nombre) {
+        this.vista = vista;
+        this.nombre = nombre;
+    }
+
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(new Random().nextInt(2000));
+            vistaPeaje.mostrarLlegadaCliente(nombre);
+            autoservicio.agregarCliente(nombre);
+            vista.mostrarClienteAgregado(nombre);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
 // Clase Caseta
 class Caseta {
     private int id;
@@ -119,4 +138,5 @@ public class LlegadaPeaje {
             hiloVehiculo.start();
         }
     }
+}
 }
